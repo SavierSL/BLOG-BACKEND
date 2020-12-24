@@ -13,6 +13,8 @@ app.use(express.json({ extended: false }));
 
 //Define Routes
 app.use("/api/users", require("./config/routers/users"));
+app.use("/api/post", require("./config/routers/post"));
+app.use("/api/auth", require("./config/routers/auth"));
 
 //we a port
 const PORT = process.env.PORT || 5000;
