@@ -154,7 +154,7 @@ router.post(
   }
 );
 
-//@route     PUT api/post/:post_id
+//@route     PUT api/post/comment/:post_id/:comment_id
 //@desc      PUT edit a comment
 //@access    Public
 router.put(
@@ -186,4 +186,26 @@ router.put(
     }
   }
 );
+
+//@route     DELETE api/post/comment/:post_id/:comment_id
+//@desc      DELETE delete a comment
+//@access    Public
+router.delete("/comment/:post_id/:comment_id", auth, async (req, res) => {
+  try {
+    let findPost = await Post.findById(req.params.post_id);
+    if (!findPost) {
+      return res.status(400).send({ msg: "Can't find post" });
+    }
+
+    findPost.comments = findPost.comments.filter((comment) => {
+      const commentID = comment._id.toString();
+      return commentID !== req.params.comment_id;
+    });
+    await findPost.save();
+    res.send(findPost);
+  } catch (error) {
+    res.status(400).send({ error: error.message });
+  }
+});
+
 module.exports = router;
